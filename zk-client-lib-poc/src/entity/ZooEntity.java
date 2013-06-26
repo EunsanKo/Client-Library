@@ -8,6 +8,11 @@ import org.apache.zookeeper.ZooKeeper;
 public class ZooEntity {
 
 	private String serverIp;
+	private String mongosServer;
+	
+	
+
+
 	private ZooKeeper zk;
 
 	private int redisMaxActive;
@@ -75,7 +80,12 @@ public class ZooEntity {
 	public void setZk(ZooKeeper zk) {
 		this.zk = zk;
 	}
-	
+	public String getMongosServer() {
+		return mongosServer;
+	}
+	public void setMongosServer(String mongosServer) {
+		this.mongosServer = mongosServer;
+	}
 	public String getRedisNodePath(){
 		return REDIS_Z_NODE;
 	}
