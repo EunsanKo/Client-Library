@@ -54,7 +54,7 @@ public class ZNodeMonitor implements Watcher{
 					listener.nodeChildrenChangedProcess();
 					
 					try {
-						zk.exists(nodePath, this);
+						zk.getChildren(nodePath, this);
 					} catch (Exception e) {
 						e.printStackTrace();
 					} 

@@ -85,7 +85,6 @@ public class ZookeeperConnectListener implements ServletContextListener {
 				byte[] nodeData = zk.getData(zet.getRedisShardRuleNodePath(), false, null);
 				zet.setRedisShardRule(new String(nodeData).split(","));
 				
-				conn.refreshShardRule(zet);
 				
 				/**
 				 * shard-rule watcher
@@ -97,6 +96,9 @@ public class ZookeeperConnectListener implements ServletContextListener {
 				redisShardRuleWatcher.setListener(redisListener);
 				
 				zk.exists(zet.getRedisShardRuleNodePath(), redisShardRuleWatcher);
+
+				conn.refreshShardRule(zet);
+				
 			}
 			
 			if(mongodbUse.equals("Y")){
@@ -139,19 +141,14 @@ public class ZookeeperConnectListener implements ServletContextListener {
 				
 				mconn.refreshMongosServer(zet);
 			}
-
-
-			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
-		
 	}
 	
 
+	
 	public static ZooKeeper getZooKeeper(final String zkservers) throws Exception {
 		synchronized (zookeepers) {
 			if (zookeepers.containsKey(zkservers)) {

@@ -9,9 +9,6 @@ public class ZooEntity {
 
 	private String serverIp;
 	private String mongosServer;
-	
-	
-
 
 	private ZooKeeper zk;
 
