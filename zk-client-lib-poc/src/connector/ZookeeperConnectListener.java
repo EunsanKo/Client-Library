@@ -96,7 +96,6 @@ public class ZookeeperConnectListener implements ServletContextListener {
 				redisShardRuleWatcher.setListener(redisListener);
 				
 				zk.exists(zet.getRedisShardRuleNodePath(), redisShardRuleWatcher);
-
 				conn.refreshShardRule(zet);
 				
 			}

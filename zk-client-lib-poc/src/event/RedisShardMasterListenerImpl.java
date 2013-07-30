@@ -41,7 +41,6 @@ public class RedisShardMasterListenerImpl implements ZNodeMonitorListener {
 				RedisConnection.getInstance().setRedisPoolDisable(shard);
 			}else{
 				RedisConnection.getInstance().refreshConnectionPool();
-				RedisConnection.getInstance().setShardMasterNodeWathcer();
 			}
 			
 		} catch (KeeperException e) {

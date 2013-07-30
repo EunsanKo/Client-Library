@@ -75,21 +75,6 @@ public class RedisConnection {
 	public void setRedisPoolDisable(String shard){
 		poolEnable.remove(shard);
 		poolEnable.put(shard, "N");
-		String masterNodePath = ze.getRedisShardsNodePath()+"/"+shard+ze.getRedisShardMasterPath();
-		ZNodeMonitor redisShardMasterWatcher = new ZNodeMonitor(ze.getZk(), masterNodePath);
-		
-		RedisShardMasterListenerImpl redisListener = new RedisShardMasterListenerImpl(ze,shard);
-		redisShardMasterWatcher.setListener(redisListener);
-		
-		try {
-			ze.getZk().getChildren(masterNodePath, redisShardMasterWatcher);
-		} catch (KeeperException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 	
 	private void makeConsistentHashing(){
@@ -105,7 +90,6 @@ public class RedisConnection {
 		
 		String[] usableShard = null;
 		List<String> usableShardList = new ArrayList<>(); 
-		
 		
 		for(int inx=0;inx<redisShardRule.length;inx++){
 			String shard = redisShardRule[inx];
@@ -167,8 +151,9 @@ public class RedisConnection {
 	 * jedis set mehtod
 	 * @param key
 	 * @param value
+	 * @throws Exception 
 	 */
-	public void set(String key, String value){
+	public void set(String key, String value) throws Exception{
 		
 		
 		String shard = ch.get(key);
@@ -188,9 +173,12 @@ public class RedisConnection {
 			Jedis resource=pool.getResource();
 			resource.auth("hermes");
 			resource.set(key, value);
+			
+			
 			pool.returnResource(resource);
 		}else{
-			System.out.println("Exception:::::커넥션을 맺을 수 없습니다. 관리자에게 연락하세요");
+			throw new Exception("Can not connect redis server. Please Contact Administrator");
+			//System.out.println("Exception:::::커넥션을 맺을 수 없습니다. 관리자에게 연락하세요");
 		}
 		
 		
@@ -200,8 +188,9 @@ public class RedisConnection {
 	 * jedis get method
 	 * @param key
 	 * @return
+	 * @throws Exception 
 	 */
-	public String get(String key){
+	public String get(String key) throws Exception{
 		
 		String value = null;
 		String shard = ch.get(key);
@@ -223,7 +212,7 @@ public class RedisConnection {
 			value = resource.get(key);
 			pool.returnResource(resource);
 		}else{
-			System.out.println("Exception:::::커넥션을 맺을 수 없습니다. 관리자에게 연락하세요");
+			throw new Exception("Can not connect redis server. Please Contact Administrator");
 		}
 		
 		return value;
